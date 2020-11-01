@@ -1,5 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
+// we'll place hooks right before creating data to encrypt it
 const bcrypt = require('bcrypt');
+//you'll need sequelize
 const sequelize = require('../config/config');
 
 // create our User model
@@ -32,7 +34,7 @@ User.init(
   },
   {
     hooks: {
-      // set up beforeCreate lifecycle "hook" functionality
+      // for safety, let's run the encryption 10 times 
       async beforeCreate(newUserData) {
         newUserData.password = await bcrypt.hash(newUserData.password, 10);
         return newUserData;
